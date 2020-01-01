@@ -1,0 +1,106 @@
+<!--
+ _     ___    _    ____  _____ ____  
+| |   / _ \  / \  |  _ \| ____|  _ \ 
+| |  | | | |/ _ \ | | | |  _| | |_) |
+| |__| |_| / ___ \| |_| | |___|  _ < 
+|_____\___/_/   \_\____/|_____|_| \_\
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Hola mundo</h1>
+    <div id="contenedor"></div>
+    <div id="loading">Cargando...</div>
+    <!--
+        <form action="../BASE-DATOS/data.html">
+        </form>
+    -->
+    <button id="btnLoad">Cargar via Ajax</button>
+    <br>
+    <p>
+        Aquí se termina la página
+    </p>
+    <script>
+        const contenedor = document.getElementById("contenedor"),
+              boton      = document.getElementById("btnLoad"),
+              loader     = document.getElementById("loading")
+
+        loader.style.display = "none"
+        boton.addEventListener("click", eventoBoton => {
+            loader.style.display = "block"
+            const xhr = new XMLHttpRequest();
+            console.log("Objeto xhr creado: ",xhr.readyState)
+            xhr.open("get", "./data.json", true)
+            console.log("Objeto abierto (open): ",xhr.readyState)
+            console.log(`Tamaño de contenedor: ${contenedor.innerHTML.length}`)
+            xhr.addEventListener("load", e => {
+                if(e.target.status !== 404){
+                    console.log(e.target.responseText)
+                    const data = JSON.parse(e.target.responseText)
+                    console.log(data)
+                    loader.style.display = "none"
+                    drop(data)
+                } else {
+                    loader.style.display = "none"
+                    contenedor.innerHTML = "<h2> ERROR 404 </h2>"
+                }
+                /* CASO GENERAL
+                switch(e.target.status){
+                    case 200:
+                        const data = JSON.parse(e.target.responseText)
+                        drop(data)
+                        break
+                    case 401:
+                        contenedor.innerHTML = "No estas autorizado para realizar esta acción"
+                        break
+                    case 404:
+                        contenedor.innerHTML = "No existe este archivo"
+                        break
+                    case 500:
+                        contenedor.innerHTML = "Hubo un error en el servidor"
+                        break
+                }
+                */
+            })
+
+            xhr.send()
+            console.log("Acción solicido (send): ",xhr.readyState)
+        })
+
+        const drop = e => {
+            // Limpiar el contenedor cuando se haga el send
+            contenedor.innerHTML = ""
+            const fragmento = document.createDocumentFragment()
+
+
+            /* POCO EFICIENTE
+            for(d of e){
+                contenedor.insertAdjacentHTML("beforeend",`<b>${d["Titulo"]}</b>  `)
+                contenedor.insertAdjacentHTML("beforeend",`<b>de ${d["Autor"]}</b> <br>`)
+            }
+            */
+
+            e.forEach(d =>{
+                const cont = document.createElement("div"),
+                      titulo = document.createElement("b"),
+                      autor  = document.createElement("u")
+
+                titulo.innerHTML = `${d["Titulo"]} `
+                autor.innerHTML = `de ${d["Autor"]}`
+
+                cont.appendChild(titulo)
+                cont.appendChild(autor)
+                fragmento.appendChild(cont)
+            })
+
+            contenedor.appendChild(fragmento)
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!--
+ _     ___    _    ____  _____ ____  
+| |   / _ \  / \  |  _ \| ____|  _ \ 
+| |  | | | |/ _ \ | | | |  _| | |_) |
+| |__| |_| / ___ \| |_| | |___|  _ < 
+|_____\___/_/   \_\____/|_____|_| \_\
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Hola mundo</h1>
+    <div id="contenedor"></div>
+    <div id="loading">Cargando...</div>
+    <!--
+        <form action="../BASE-DATOS/data.html">
+        </form>
+    -->
+    <button id="btnLoad">Cargar via Ajax</button>
+    <br>
+    <p>
+        Aquí se termina la página
+    </p>
+    <script>
+        const contenedor = document.getElementById("contenedor"),
+              boton      = document.getElementById("btnLoad"),
+              loader     = document.getElementById("loading")
+
+        loader.style.display = "none"
+        boton.addEventListener("click", eventoBoton => {
+            loader.style.display = "block"
+            const xhr = new XMLHttpRequest();
+            console.log("Objeto xhr creado: ",xhr.readyState)
+            xhr.open("get", "../BASE-DATOS/data.html", true)
+            console.log("Objeto abierto (open): ",xhr.readyState)
+            xhr.addEventListener("load", e => {
+                console.log(e.target)
+                console.log("Objeto cargado: ",xhr.readyState)
+                contenedor.innerHTML = e.target.responseText
+                loader.style.display = "none"
+            })
+
+            xhr.send()
+            console.log("Acción solicido (send): ",xhr.readyState)
+        })
+    </script>
+</body>
+</html>
