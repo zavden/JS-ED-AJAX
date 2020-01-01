@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Hola mundo</h1>
+    <div id="contenedor"></div>
+    <!--
+        <form action="../BASE-DATOS/data.html">
+        </form>
+    -->
+    <button id="btnLoad">Cargar via Ajax</button>
+    <br>
+    <p>
+        Aquí se termina la página
+    </p>
+    <script>
+        const contenedor = document.getElementById("contenedor"),
+              boton      = document.getElementById("btnLoad")
+            
+        boton.addEventListener("click", eventoBoton => {
+            const xhr = new XMLHttpRequest();
+            xhr.open("get", "../BASE-DATOS/data.html", true)
+
+            xhr.addEventListener("load", e => {
+                console.log(e.target)
+                contenedor.innerHTML = e.target.responseText
+            })
+
+            xhr.send()
+        })
+    </script>
+</body>
+</html>
